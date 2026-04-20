@@ -13,7 +13,6 @@ class Field:
         return num
 
 
-
     def display_board(self):
         print("---------------------------------")
         for i in range(64):
@@ -34,7 +33,6 @@ class Game:
     def __init__(self, field_object):
         self.field = field_object
         self.turn = "B"
-
 
 
     def put_stone(self, row, col):
@@ -63,9 +61,6 @@ class Game:
         self.turn = "W" if self.turn == "B" else "B"
 
         self.field.display_board()
-
-    
-        
 
 
     def can_flip(self, row, col):
@@ -113,27 +108,24 @@ class Othello:
         self.othello_board = Field()
         self.manager = Game(self.othello_board)
 
+
     def run(self):
         self.othello_board.display_board()
-
 
         while True:
             print(f"現在は {self.manager.turn} の番です。")
             
-            # 1. もし現在のプレイヤーが置ける場所がなかったら？
             if not self.manager.has_valid_move():
                 print(f"{self.manager.turn}はおける場所がないためパスです。")
-                # パスの処理
+
                 self.manager.turn = "W" if self.manager.turn == "B" else "B"
 
                 if not self.manager.has_valid_move():
                     print("ゲーム終了です！")
-                    # もし相手も置けなかったら、break でループを抜ける！
                     break
 
                 continue
 
-            # 2. ユーザーからの入力
             try:
                 r = int(input("行 (0-7): "))
                 c = int(input("列 (0-7): "))
@@ -141,11 +133,8 @@ class Othello:
                 print("数字を入力してください！")
                 continue
 
-            # 3. 石を置く
             self.manager.put_stone(r, c)
             
-            # もし二人とも打てなくなったら、whileループを抜ける（break）
-        # ループを抜けた後
         black_score = self.othello_board.board.count("B")
         white_score = self.othello_board.board.count("W")
 
@@ -153,7 +142,6 @@ class Othello:
 
         if black_score > white_score:
             print("黒の勝ちです！")
-        # あと2つのパターン（白の勝ち、引き分け）はどう書けば良いでしょうか？
         elif black_score == white_score:
             print("引き分けです！")
         else:

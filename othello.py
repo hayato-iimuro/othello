@@ -28,7 +28,6 @@ class Field:
 
 
     
-
 class Game:
     def __init__(self, field_object):
         self.field = field_object
@@ -92,14 +91,6 @@ class Game:
                     if self.can_flip(r, c) != []:
                         return True
         return False
-
-            
-         
-
-
-
-
-
 
 
 

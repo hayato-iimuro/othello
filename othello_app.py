@@ -100,17 +100,18 @@ class Game:
     def can_flip(self, row, col):
         opponent = "⚪️" if self.turn == "⚫️" else "⚫️"
         flippable_list = []
+        #隣のマスの相対的座標
         directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
-        
+        #コマを置いたマスの隣のマスを探索する
         for dr, dc in directions:
             temp_candidates = []
             nr, nc = row + dr, col + dc
-            
+            #その方向に相手のコマが連続している限り探索を続け、相手のコマの座標をtemp_candidatesに追加する
             while (self.field.disc_inside(nr, nc)) and (self.field.board[self.field.get_index(nr, nc)] == opponent):
                 temp_candidates.append(self.field.get_index(nr, nc))
                 nr += dr
                 nc += dc
-                
+            # もし進んだマスのコマが自分の色であった場合、そこで探索を終了し、temp_candidatesをflippable_listに追加する
             if (self.field.disc_inside(nr, nc)) and (self.field.board[self.field.get_index(nr, nc)] == self.turn):
                 flippable_list.extend(temp_candidates)
         
@@ -125,26 +126,28 @@ class Othello:
 
     def run(self):
         while True:
-            #
+            #コマをおける場所を⭐︎にする
             self.manager.flippable_point()
             self.othello_board.display_board()
             
             print(f"現在は {self.manager.turn} の番です。")
             
+            #コマをおける場所があるかチェックし、なければメッセージする
             if not self.manager.has_valid_move():
                 print(f"{self.manager.turn}はおける場所がないためパスです。")
                 self.manager.turn = "⚪️" if self.manager.turn == "⚫️" else "⚫️"
 
                 # パス後、相手も置ける場所がないか（ゲーム終了か）を確認
-                self.manager.update_stars()
+                self.manager.flippable_point()
                 if not self.manager.has_valid_move():
                     print("両者ともおける場所がありません。ゲーム終了です！")
                     break
                 continue
-
+            #黒のターンをCPUに操作させる
             if self.manager.turn == "⚫️":
                 r = self.cpu.cpu_choice()
                 c = self.cpu.cpu_choice()
+            #白のターンはプレイヤーにコマを置く場所を選択させる
             else:
                 try:
                     r = int(input("行 (0-7): "))

@@ -1,19 +1,19 @@
 import random
 #CPUを管理するクラス
 class Cpu:
-    def __init__(self):
+    def __init__(self) -> None:
         self.othello_board = Field()
         self.manager = Game(self.othello_board)
 
     #0~7の整数をランダムで取得
-    def cpu_choice(self):
+    def cpu_choice(self) -> int:
         num = random.randint(0, 7)
         return num
 
 
 # 盤面の状態を管理するクラス
 class Field:
-    def __init__(self):
+    def __init__(self) -> None:
         self.board = ['⬜︎'] * 64
 
         # 初期配置
@@ -23,11 +23,11 @@ class Field:
         self.board[self.get_index(4, 4)] = "⚪️"
 
     #マスの番号から座標を取得する
-    def get_index(self, row, col):
+    def get_index(self, row: int, col: int) -> int:
         return row * 8 + col
 
     #盤面を作る
-    def display_board(self):
+    def display_board(self) -> None:
         print("-" * 41)
         for i in range(64):
             if i % 8 == 7:
@@ -37,17 +37,18 @@ class Field:
                 print(f"| {self.board[i]} ", end="")
 
     #盤面の範囲を定義する
-    def disc_inside(self, row, col):
+    def disc_inside(self, row: int, col: int) -> bool:
         return 0 <= row <= 7 and 0 <= col <= 7
 
 
 # ゲーム進行を管理するクラス
 class Game:
-    def __init__(self, field_object):
+    def __init__(self, field_object: Field) -> None:
         self.field = field_object
         self.turn = "⚫️"
 
-    def flippable_point(self):
+
+    def flippable_point(self) -> None:
         # 1. 前のターンで付けた⭐︎をすべて ⬜︎ にリセットする
         for i in range(64):
             if self.field.board[i] == "⭐︎":
@@ -62,20 +63,20 @@ class Game:
                         # 相手の石ではなく、空きマスそのものに⭐︎を置く
                         self.field.board[self.field.get_index(r, c)] = "⭐︎"
 
-    def has_valid_move(self):
+    def has_valid_move(self) -> bool:
         #星が一つでもあればTrueを返す
         return "⭐︎" in self.field.board
 
     # 石を置くメソッド
-    def put_stone(self, row, col):
+    def put_stone(self, row: int, col: int) -> bool:
         # 選択した座標が盤面の中かどうか判定
         if not self.field.disc_inside(row, col):
             print("盤面の中にコマを置いてください。")
             return False  # ループをやり直すためにFalseを返す
 
         # コマが置かれていないかを判定
-        target_index = self.field.get_index(row, col)
-        if self.field.board[target_index] not in ("⬜︎", "⭐︎"):
+        xy_index = self.field.get_index(row, col)
+        if self.field.board[xy_index] not in ("⬜︎", "⭐︎"):
             print("そこにはすでにコマがあります。")
             return False
         
@@ -86,7 +87,7 @@ class Game:
             return False
 
         # コマを置く
-        self.field.board[target_index] = self.turn
+        self.field.board[xy_index] = self.turn
             
         # 挟んだ石をひっくり返す
         for index in flippable:
@@ -97,7 +98,7 @@ class Game:
         return True  # 成功した場合はTrueを返す
 
     # 引数として受けとった座標にコマを置いた場合に、ひっくり返せるコマのリストを返す
-    def can_flip(self, row, col):
+    def can_flip(self, row: int, col:int) -> list:
         opponent = "⚪️" if self.turn == "⚫️" else "⚫️"
         flippable_list = []
         #隣のマスの相対的座標
@@ -119,16 +120,16 @@ class Game:
 
 
 class Othello:
-    def __init__(self):
+    def __init__(self) -> None:
         self.othello_board = Field()
         self.manager = Game(self.othello_board)
         self.cpu = Cpu()
 
-    def run(self):
+    def run(self) -> None:
         while True:
             #コマをおける場所を⭐︎にする
             self.manager.flippable_point()
-            self.othello_board.display_board()
+            
             
             print(f"現在は {self.manager.turn} の番です。")
             
@@ -161,6 +162,7 @@ class Othello:
             if not success:
                 continue
             
+            self.othello_board.display_board()
         # ゲーム終了時のスコア計算
         black_score = self.othello_board.board.count("⚫️")
         white_score = self.othello_board.board.count("⚪️")

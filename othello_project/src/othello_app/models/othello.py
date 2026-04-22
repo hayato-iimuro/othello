@@ -34,6 +34,7 @@ class Othello:
             if self.manager.turn == "⚫️":
                 r = self.cpu.cpu_choice()
                 c = self.cpu.cpu_choice()
+
             #白のターンはプレイヤーにコマを置く場所を選択させる
             else:
                 try:
@@ -58,6 +59,8 @@ class Othello:
         # ゲーム終了時のスコア計算
         black_score = self.othello_board.board.count("⚫️")
         white_score = self.othello_board.board.count("⚪️")
+
+        self.manager.flippable_point()
 
         print(f"\n結果: 黒 {black_score} - 白 {white_score}")
 

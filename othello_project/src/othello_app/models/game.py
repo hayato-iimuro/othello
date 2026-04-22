@@ -9,15 +9,15 @@ class Game:
 
 
     def flippable_point(self) -> None:
-        # 1. 前のターンで付けた⭐︎をすべて ⬜︎ にリセットする
+        # 1. 前のターンで付けた⭐︎をすべて 空白 にリセットする
         for i in range(64):
             if self.field.board[i] == "⭐︎":
-                self.field.board[i] = "⬜︎"
+                self.field.board[i] = "  "
         
         # 2. 現在のプレイヤーが石を置ける場所を探索し、⭐︎を配置する
         for r in range(8):
             for c in range(8):
-                if self.field.board[self.field.get_index(r, c)] == "⬜︎":
+                if self.field.board[self.field.get_index(r, c)] == "  ":
                     # Pythonicな書き方: リストが空でない場合はTrueとして扱われる
                     if self.can_flip(r, c):
                         # 相手の石ではなく、空きマスそのものに⭐︎を置く
@@ -36,7 +36,7 @@ class Game:
 
         # コマが置かれていないかを判定
         xy_index = self.field.get_index(row, col)
-        if self.field.board[xy_index] not in ("⬜︎", "⭐︎"):
+        if self.field.board[xy_index] not in ("  ", "⭐︎"):
             print("そこにはすでにコマがあります。")
             return False
         

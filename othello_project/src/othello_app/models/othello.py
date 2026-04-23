@@ -1,13 +1,13 @@
-from models.stone import Stone
-from models.field import Field
-from models.game import Game
-from models.cpu import Cpu
+from .stone import Stone
+from .field import Field
+from .game import Game
+from .cpu import Cpu
 
 class Othello:
-    def __init__(self) -> None:
-        self.othello_board = Field()
-        self.manager = Game(self.othello_board)
-        self.cpu = Cpu()
+    def __init__(self, manager=None, othello_board=None ,cpu=None) -> None:
+        self.othello_board = othello_board or Field()
+        self.manager = manager or Game(self.othello_board)
+        self.cpu = cpu or Cpu()
 
     def run(self) -> None:
         self.manager.flippable_point()

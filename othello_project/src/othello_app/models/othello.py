@@ -1,3 +1,4 @@
+from models.stone import Stone
 from models.field import Field
 from models.game import Game
 from models.cpu import Cpu
@@ -22,7 +23,7 @@ class Othello:
             #コマをおける場所があるかチェックし、なければメッセージする
             if not self.manager.has_valid_move():
                 print(f"{self.manager.turn}はおける場所がないためパスです。")
-                self.manager.turn = "⚪️" if self.manager.turn == "⚫️" else "⚫️"
+                self.manager.turn = str(Stone.WHITE) if self.manager.turn == str(Stone.BLACK) else str(Stone.BLACK)
 
                 # パス後、相手も置ける場所がないか（ゲーム終了か）を確認
                 self.manager.flippable_point()
@@ -31,7 +32,7 @@ class Othello:
                     break
                 continue
             #黒のターンをCPUに操作させる
-            if self.manager.turn == "⚫️":
+            if self.manager.turn == str(Stone.BLACK):
                 r = self.cpu.cpu_choice()
                 c = self.cpu.cpu_choice()
 
@@ -47,7 +48,7 @@ class Othello:
             # 石を置く処理。置けなかった場合（False）は、continueでループの先頭に戻る
             success = self.manager.put_stone(r, c)
             if success:
-                if self.manager.turn == "⚪️":
+                if self.manager.turn == str(Stone.WHITE):
                     #コマをおける場所を⭐︎にする
                     self.manager.flippable_point()
                     self.othello_board.display_board()
@@ -57,8 +58,8 @@ class Othello:
             
             
         # ゲーム終了時のスコア計算
-        black_score = self.othello_board.board.count("⚫️")
-        white_score = self.othello_board.board.count("⚪️")
+        black_score = self.othello_board.board.count(str(Stone.BLACK))
+        white_score = self.othello_board.board.count(str(Stone.WHITE))
 
         self.manager.flippable_point()
 

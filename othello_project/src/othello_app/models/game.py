@@ -1,31 +1,32 @@
 # ゲーム進行を管理するクラス
 
 from models.field import Field
+from models.stone import Stone
 
 class Game:
     def __init__(self, field_object: Field) -> None:
         self.field = field_object
-        self.turn = "⚫️"
+        self.turn = str(Stone.BLACK)
 
 
     def flippable_point(self) -> None:
         # 1. 前のターンで付けた⭐︎をすべて 空白 にリセットする
         for i in range(64):
-            if self.field.board[i] == "⭐︎":
-                self.field.board[i] = "  "
+            if self.field.board[i] == str(Stone.FLIPPABLE):
+                self.field.board[i] = str(Stone.EMPTY)
         
         # 2. 現在のプレイヤーが石を置ける場所を探索し、⭐︎を配置する
         for r in range(8):
             for c in range(8):
-                if self.field.board[self.field.get_index(r, c)] == "  ":
+                if self.field.board[self.field.get_index(r, c)] == str(Stone.EMPTY):
                     # Pythonicな書き方: リストが空でない場合はTrueとして扱われる
                     if self.can_flip(r, c):
                         # 相手の石ではなく、空きマスそのものに⭐︎を置く
-                        self.field.board[self.field.get_index(r, c)] = "⭐︎"
+                        self.field.board[self.field.get_index(r, c)] = str(Stone.FLIPPABLE)
 
     def has_valid_move(self) -> bool:
         #星が一つでもあればTrueを返す
-        return "⭐︎" in self.field.board
+        return str(Stone.FLIPPABLE) in self.field.board
 
     # 石を置くメソッド
     def put_stone(self, row: int, col: int) -> bool:
@@ -36,7 +37,7 @@ class Game:
 
         # コマが置かれていないかを判定
         xy_index = self.field.get_index(row, col)
-        if self.field.board[xy_index] not in ("  ", "⭐︎"):
+        if self.field.board[xy_index] not in (str(Stone.EMPTY), str(Stone.FLIPPABLE)):
             print("そこにはすでにコマがあります。")
             return False
         
@@ -54,12 +55,12 @@ class Game:
             self.field.board[index] = self.turn
 
         # ターンを交代する
-        self.turn = "⚪️" if self.turn == "⚫️" else "⚫️"
+        self.turn = str(Stone.WHITE) if self.turn == str(Stone.BLACK) else str(Stone.BLACK)
         return True  # 成功した場合はTrueを返す
 
     # 引数として受けとった座標にコマを置いた場合に、ひっくり返せるコマのリストを返す
     def can_flip(self, row: int, col:int) -> list:
-        opponent = "⚪️" if self.turn == "⚫️" else "⚫️"
+        opponent = str(Stone.WHITE) if self.turn == str(Stone.BLACK) else str(Stone.BLACK)
         flippable_list = []
         #隣のマスの相対的座標
         directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]

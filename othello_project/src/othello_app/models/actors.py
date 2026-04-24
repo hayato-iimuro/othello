@@ -60,11 +60,11 @@ def play_turn(player: GamePlayer) -> tuple[int, int]:
 
 
 if __name__ == "__main__":
-    # CPUと人間のインスタンスを作成
+    
     cpu_player = Cpu()
     human_player = Player()
 
-    # 同じ関数 play_turn に異なるクラスのインスタンスを渡す（ダックタイピング）
+   
     play_turn(cpu_player)
     play_turn(human_player)
 

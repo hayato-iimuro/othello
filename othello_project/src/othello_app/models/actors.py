@@ -53,13 +53,9 @@ class Player:
 
 
 def play_turn(player: GamePlayer) -> tuple[int, int]:
-    """
-    引数 player は GamePlayer プロトコルを満たしていれば、
-    Cpu クラスのインスタンスでも Player クラスのインスタンスでも受け付けます。
-    """
+    
     print(f"\n{player.display_name()} のターンです。")
     r, c = player.choice()
-    print(f"選んだ座標: 行={r}, 列={c}")
     return r, c
 
 

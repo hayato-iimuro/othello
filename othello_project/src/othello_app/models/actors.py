@@ -1,10 +1,17 @@
 #CPUを管理するクラス
 import random
+from typing import Protocol
+
+
+class GamePlayer(Protocol):
+    def display_name(self) -> str:
+        ...
+    def choice(self) -> tuple[int, int]:
+        ...
+
+
 
 class Cpu:
-    def __init__(self) -> None:
-        pass
-
 
     def display_name(self) -> str:
         name = "CPU"
@@ -22,6 +29,7 @@ class Cpu:
     
     
 class Player:
+
     def __init__(self) -> None:
         pass
 
@@ -44,5 +52,23 @@ class Player:
 
 
 
+def play_turn(player: GamePlayer) -> tuple[int, int]:
+    """
+    引数 player は GamePlayer プロトコルを満たしていれば、
+    Cpu クラスのインスタンスでも Player クラスのインスタンスでも受け付けます。
+    """
+    print(f"\n{player.display_name()} のターンです。")
+    r, c = player.choice()
+    print(f"選んだ座標: 行={r}, 列={c}")
+    return r, c
 
+
+if __name__ == "__main__":
+    # CPUと人間のインスタンスを作成
+    cpu_player = Cpu()
+    human_player = Player()
+
+    # 同じ関数 play_turn に異なるクラスのインスタンスを渡す（ダックタイピング）
+    play_turn(cpu_player)
+    play_turn(human_player)
 

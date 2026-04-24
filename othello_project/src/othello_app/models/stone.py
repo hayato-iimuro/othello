@@ -8,5 +8,8 @@ class Stone(IntEnum):
     BLACK = 1
 
     FLIPPABLE = 5
+
+    SQUARES_NUMBER = 64
+    BOARD_SIDE_LENGTH = 8
         
 

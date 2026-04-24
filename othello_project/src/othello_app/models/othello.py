@@ -1,22 +1,53 @@
 from .stone import Stone
 from .field import Field
 from .game import Game
-from .cpu import Cpu
+from .cpu import Cpu, Player
 
 class Othello:
     def __init__(self, manager=None, othello_board=None ,cpu=None) -> None:
         self.othello_board = othello_board or Field()
         self.manager = manager or Game(self.othello_board)
-        self.cpu = cpu or Cpu()
+        self.actors = {}
 
     def run(self) -> None:
+        #PvPかPvCかを選択する
+
+        black_key = str(Stone.BLACK.value)
+        white_key = str(Stone.WHITE.value)
+
+        try:
+            a = int(input(f"『黒』を選んでください。  1.Player 2.CPU "))
+            b = int(input(f"『白』を選んでください。  1.Player 2.CPU "))
+
+            self.actors[black_key] = Player() if a == 1 else Cpu()
+            self.actors[white_key] = Player() if b == 1 else Cpu()
+
+            if a == b == 1:
+                print(f"黒:Player 白:Player で対戦を開始します。")
+
+            elif a == 1 and b == 2:
+                print(f"黒:Player 白:CPU で対戦を開始します。")
+
+            elif a == 2 and b == 1:
+                print(f"黒:CPU 白:Player で対戦を開始しまします。")
+
+            elif a == b == 2:
+                print(f"黒：CPU 白:CPU で対戦を開始します。")
+        except ValueError:
+            print("数字を入力してください！")
+
+       
+
+
+
+
         self.manager.flippable_point()
         self.othello_board.display_board()
 
 
         while True:
             
-            
+            current_actor = self.actors[self.manager.turn]
             
             print(f"現在は {self.manager.turn} の番です。")
             
@@ -31,19 +62,15 @@ class Othello:
                     print("両者ともおける場所がありません。ゲーム終了です！")
                     break
                 continue
-            #黒のターンをCPUに操作させる
-            if self.manager.turn == str(Stone.BLACK):
-                r = self.cpu.cpu_choice()
-                c = self.cpu.cpu_choice()
+            
+            
+            
 
-            #白のターンはプレイヤーにコマを置く場所を選択させる
-            else:
-                try:
-                    r = int(input("行 (0-7): "))
-                    c = int(input("列 (0-7): "))
-                except ValueError:
-                    print("数字を入力してください！")
-                    continue
+            r, c = current_actor.choice()
+
+
+
+            
 
             # 石を置く処理。置けなかった場合（False）は、continueでループの先頭に戻る
             success = self.manager.put_stone(r, c)

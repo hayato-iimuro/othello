@@ -1,4 +1,4 @@
-from models.stone import Stone
+from .stone import Stone
 
 # 盤面の状態を管理するクラス
 class Field:

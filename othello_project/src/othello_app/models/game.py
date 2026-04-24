@@ -1,7 +1,7 @@
 # ゲーム進行を管理するクラス
 
-from models.field import Field
-from models.stone import Stone
+from .field import Field
+from .stone import Stone
 
 class Game:
     def __init__(self, field_object: Field) -> None:
@@ -11,12 +11,12 @@ class Game:
 
     def flippable_point(self) -> None:
         # 1. 前のターンで付けた⭐︎をすべて 空白 にリセットする
-        for i in range(64):
+        for i in range(Stone.SQUARES_NUMBER):
             if self.field.board[i] == str(Stone.FLIPPABLE):
                 self.field.board[i] = str(Stone.EMPTY)
         
         # 2. 現在のプレイヤーが石を置ける場所を探索し、⭐︎を配置する
-        for r in range(8):
+        for r in range(Stone.BOARD_SIDE_LENGTH):
             for c in range(8):
                 if self.field.board[self.field.get_index(r, c)] == str(Stone.EMPTY):
                     # Pythonicな書き方: リストが空でない場合はTrueとして扱われる

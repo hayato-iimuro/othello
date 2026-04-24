@@ -1,7 +1,7 @@
 from .stone import Stone
 from .field import Field
 from .game import Game
-from .cpu import Cpu, Player
+from .actors import Cpu, Player
 
 class Othello:
     def __init__(self, manager=None, othello_board=None ,cpu=None) -> None:

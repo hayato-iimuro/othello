@@ -24,7 +24,6 @@ def test_players_selecrt(mocker):
     othello = Othello()
 
     mocker.patch("builtins.input", side_effect=["1", "2"])
-    
     mock_print = mocker.patch("builtins.print")
 
     othello.players_select()
@@ -52,7 +51,7 @@ def test_result(mocker):
 
 
 def test_run(mocker):
-    # 1. 各モックの作成
+    
     mock_manager = MagicMock()
     mock_board = MagicMock()
     mock_cpu = MagicMock()
@@ -63,7 +62,7 @@ def test_run(mocker):
     mocker.patch.object(othello, "players_select")
     mocker.patch.object(othello, "result")
 
-    # 2. 状態の初期設定
+    
     mock_manager.turn = str(Stone.WHITE)
     mock_manager.put_stone.return_value = True
     
@@ -80,7 +79,7 @@ def test_run(mocker):
     
     mock_print = mocker.patch("builtins.print")
 
-    # 実行
+
     othello.run()
 
     mock_print.assert_any_call("両者ともおける場所がありません。ゲーム終了です！")

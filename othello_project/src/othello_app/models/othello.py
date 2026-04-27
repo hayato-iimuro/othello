@@ -49,6 +49,8 @@ class Othello:
         else:
             print("引き分けです！")
 
+            
+
     def run(self) -> None:
         
         self.players_select()

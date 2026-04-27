@@ -1,11 +1,13 @@
 #CPUを管理するクラス
 import random
 from typing import Protocol
+from .game import Game
 
 
 class GamePlayer(Protocol):
     def display_name(self) -> str:
         ...
+
     def choice(self) -> tuple[int, int]:
         ...
 
@@ -16,7 +18,8 @@ class Cpu:
     def display_name(self) -> str:
         name = "CPU"
         return name
-
+    
+    
 
 
     #0~7の整数をランダムで取得
